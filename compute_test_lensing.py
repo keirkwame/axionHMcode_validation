@@ -152,7 +152,7 @@ input_file_path = 'input_file.txt'
     
 #IMPORTANT:Change here the path to the axionCAMB executable path directory (second path in the function)
 # assumes that thee axionCAMB executable is names .camb
-axionCAMB_exe_path = '/home/alex/TD_SV_axionHMcode/axionHMcode'
+axionCAMB_exe_path = '/home/keir/Software/axionHMcode_validation/' #'/home/alex/TD_SV_axionHMcode/axionHMcode/'
     
 ################################################################################    
 # save cosmological parameter in a dictionary 
@@ -169,12 +169,12 @@ def get_nl_ratio(redshift):
     cosmos['G_a'] = func_D_z_unnorm_int(cosmos['z'], cosmos['Omega_m_0'], cosmos['Omega_w_0']) # recompute
     
     if redshift <=4:
-        axionCAMB_wrapper.axioncamb_params('paramfiles/paramfile_axionCAMB.txt', 
+        axionCAMB_wrapper.axioncamb_params('paramfile_axionCAMB.txt', 
                                            cosmos, massless_neutrinos=2.044, massive_neutrinos=1, omnuh2=0.06/93.14,
                                        transfer_high_precision='T',  transfer_k_per_logint=10, 
                                        accuracy_boost=2, l_accuracy_boost=1, l_sample_boost=1,
-                                           output_root='paramfiles/cosmos', print_info = True)
-        axionCAMB_wrapper.run_axioncamb('paramfiles/paramfile_axionCAMB.txt', 
+                                           output_root=axionCAMB_exe_path + 'cosmos', print_info = True)
+        axionCAMB_wrapper.run_axioncamb('paramfile_axionCAMB.txt', 
                                     axionCAMB_exe_path, 
                                         cosmos, print_info = True)
 
@@ -184,7 +184,7 @@ def get_nl_ratio(redshift):
         # Create linear power spectra from axionCAMB tranfer functions 
         ################################################################################
         #lin PS on given k range
-        power_spec_dic_ax = lin_power_spectrum.func_power_spec_dic('paramfiles/cosmos_transfer_out.dat', cosmos)
+        power_spec_dic_ax = lin_power_spectrum.func_power_spec_dic(axionCAMB_exe_path + 'cosmos_transfer_out.dat', cosmos)
 
 
 
