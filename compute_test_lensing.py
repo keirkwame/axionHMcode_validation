@@ -216,29 +216,43 @@ def get_nl_ratio(redshift):
         ratio = PS_matter_nonlin[0] / power_spec_dic_ax['power_total']
         ratio = ratio * nu_nl_corr
         pk = PS_matter_nonlin[0] * nu_nl_corr
+        pk_lin = [list(power_spec_dic_ax['power_total']),]
+        pk_k = [list(power_spec_dic_ax['k']),]
     else:
         ratio = 1.
         pk = 1.
+        pk_lin = 1.
+        pk_k = 1.
 
-    return ratio, pk
+    return ratio, pk, pk_lin, pk_k
 
 
 ## RUN FUNCTION AND SAVE OUTPUT ##
 ratios = []
 pks = []
+pk_lins = []
+pk_ks = []
 for z in zs:
-    ratio, pk = get_nl_ratio(z)
+    ratio, pk, pk_lin, pk_k = get_nl_ratio(z)
     ratios.append(ratio)
     pks.append(pk)
+    pk_lins.append(pk_lin)
+    pk_k.append(pk_k)
     print(z, " done!")
 
 
 ratios_copy = ratios.copy()
 pks_copy = pks.copy()
+pk_lins_copy = pk_lins.copy()
+pk_ks_copy = pk_ks.copy()
 for xi in range(len(ratios)):
     if np.all(ratios[xi] == 1.):
         ratios_copy[xi] = np.ones(len(ratios[0]))
         pks_copy[xi] = np.ones(len(ratios[0]))
+        pk_lins_copy[xi] = np.ones(len(ratios[0]))
+        pk_ks_copy[xi] = np.ones(len(ratios[0]))
         
 np.savetxt('nonlinear_ratios.dat', np.array(ratios_copy))
 np.savetxt('nonlinear_pks.dat', np.array(pks_copy))
+np.savetxt('linear_pks.dat', np.array(pk_lins_copy))
+np.savetxt('k.dat', np.array(pk_ks_copy))
